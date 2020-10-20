@@ -1,20 +1,31 @@
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Factory {
-    public static ILoginPage createLoginPage() {
-        return new LoginPage(createLoginLogic(), new Scanner(System.in));
+    public static LoginPageView createLoginPageView() {
+        return new LoginPageView();
     }
 
-    public static ILoginLogic createLoginLogic() {
-        return new LoginLogic(createDataAccessor());
+    public static StudentMainPageView createStudentMainPageView() {
+        return new StudentMainPageView();
     }
 
-    public static IMainPage createStudentMainPage() {
-        return new StudentMainPage(createStudentMainPageLogic(), new Scanner(System.in));
+    public static ILoginPageController createLoginPageController() {
+        return new LoginPageController(createLoginPageView(), createDataAccessor(), new Scanner(System.in));
     }
 
-    public static IMainPage createAdminMainPage() {
-        return new AdminMainPage(createAdminMainPageLogic(), new Scanner(System.in));
+    public static IMainPageController createStudentMainPageController() {
+        return new StudentMainPageController(createStudentMainPageView(), createDataAccessor(), new Scanner(System.in));
+    }
+
+    public static AdminMainPageView createAdminMainPageView() {
+        return new AdminMainPageView();
+    }
+
+    public static IMainPageController createAdminMainPageController() {
+        return new AdminMainPageController(createAdminMainPageView(), createDataAccessor(), new Scanner(System.in),
+                new SimpleDateFormat("dd.MM.yyyy, HH:mm", Locale.ENGLISH));
     }
 
     public static IDataAccessor createDataAccessor() {
@@ -22,27 +33,26 @@ public class Factory {
     }
 
     public static IDatabase createDatabase() {
-        return new SerialisedFile();
+        return new MockSerialisedFile();
     }
 
-    public static IMainPageLogic createStudentMainPageLogic() {
-        return new StudentMainPageLogic(createStudentController(), createCourseController());
+//    public static IStudentController createStudentController() {
+//        return new StudentController();
+//    }
+//
+//    public static ICourseController createCourseController() {
+//        return new CourseController();
+//    }
+
+    public static IUser createStudent() {
+        return new StudentUser(createStudentMainPageController());
     }
 
-    public static IMainPageLogic createAdminMainPageLogic() {
-        return new AdminMainPageLogic(createStudentController(), createCourseController());
+    public static IUser createAdmin() {
+        return new AdminUser(createAdminMainPageController());
     }
-
-    public static IStudentController createStudentController() {
-        return new StudentController();
-    }
-
-    public static ICourseController createCourseController() {
-        return new CourseController();
-    }
-
-    public static IStudent createStudent() {
-        return new Student();
+    public static IUser createUser() {
+        return new User();
     }
 
     public static ICourse createCourse() {

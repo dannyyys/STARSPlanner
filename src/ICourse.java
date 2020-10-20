@@ -4,5 +4,5 @@ public interface ICourse {
     String getCourseCode();
     void setCourseCode(String courseCode);
     ArrayList<IIndex> getIndexes();
-    void setGetIndexes(ArrayList<IIndex> indexes);
+    void addIndex(IIndex index);
 }

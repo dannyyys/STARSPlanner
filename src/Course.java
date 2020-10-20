@@ -1,8 +1,12 @@
 import java.util.ArrayList;
 
-public class Course implements ICourse{
+public class Course implements ICourse {
     private String courseCode;
     private ArrayList<IIndex> indexes;
+
+    public Course() {
+        indexes = new ArrayList<>();
+    }
 
     @Override
     public String getCourseCode() {
@@ -20,7 +24,13 @@ public class Course implements ICourse{
     }
 
     @Override
-    public void setGetIndexes(ArrayList<IIndex> indexes) {
-        this.indexes = indexes;
+    public String toString() {
+        return "courseCode='" + courseCode + '\'' +
+                ", indexes=" + indexes;
+    }
+
+    @Override
+    public void addIndex(IIndex index) {
+        this.indexes.add(index);
     }
 }

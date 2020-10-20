@@ -1,11 +1,21 @@
 import java.util.ArrayList;
 
-public class Index implements IIndex{
+public class Index implements IIndex {
     int indexNum;
     ArrayList<IStudent> studentWaitingList;
     ArrayList<IStudent> enrolledStudentList;
     int vacancies;
 
+    @Override
+    public String toString() {
+        return "indexNum=" + indexNum +
+                ", vacancies=" + vacancies;
+    }
+
+    public Index() {
+        studentWaitingList = new ArrayList<>();
+        enrolledStudentList = new ArrayList<>();
+    }
     @Override
     public int getIndexNum() {
         return indexNum;

@@ -1,14 +1,14 @@
 public class StarsPlannerApp {
 
     public static void main(String[] args) {
-        int status;
+        boolean repeat;
         do {
-            ILoginPage loginPage = Factory.createLoginPage();
-            loginPage.loginDisplay();
+            ILoginPageController loginPage = Factory.createLoginPageController();
 
-            IMainPage mainPage = loginPage.login();
-            status = mainPage.mainPageDisplay();
-        } while (status != 0);
+            IMainPageController mainPage = loginPage.login();
+
+            repeat = mainPage.performFunctions();
+        } while (repeat);
 
     }
 }
