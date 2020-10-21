@@ -10,10 +10,9 @@ public class StudentMainPageController implements IMainPageController {
     Scanner _scanner;
     IStudent user;
 
-    public StudentMainPageController(StudentMainPageView studentMainPageView, IDataAccessor dataAccessor,
+    public StudentMainPageController(StudentMainPageView studentMainPageView,
                                      Scanner scanner) {
         this._studentMainPageView = studentMainPageView;
-        this._dataAccessor = dataAccessor;
         this._scanner = scanner;
     }
 
@@ -48,6 +47,11 @@ public class StudentMainPageController implements IMainPageController {
     @Override
     public void addUserInfo(IUser user) {
         this.user = (IStudent) user;
+    }
+
+    @Override
+    public void addDataAccessor(IDataAccessor dataAccessor) {
+        this._dataAccessor = dataAccessor;
     }
 
     private void exit() {

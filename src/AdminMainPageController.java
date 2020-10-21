@@ -10,10 +10,9 @@ public class AdminMainPageController implements IMainPageController {
     IUser user;
     DateFormat dateFormat;
 
-    public AdminMainPageController(AdminMainPageView adminMainPagView, IDataAccessor dataAccessor,
+    public AdminMainPageController(AdminMainPageView adminMainPagView,
                                    Scanner scanner, DateFormat dateFormat) {
         this._adminMainPageView = adminMainPagView;
-        this._dataAccessor = dataAccessor;
         this._scanner = scanner;
         this.dateFormat = dateFormat;
     }
@@ -64,6 +63,10 @@ public class AdminMainPageController implements IMainPageController {
         return logout;
     }
 
+    @Override
+    public void addDataAccessor(IDataAccessor dataAccessor) {
+        this._dataAccessor = dataAccessor;
+    }
     @Override
     public void addUserInfo(IUser user) {
         this.user = user;

@@ -49,12 +49,13 @@ public class StarsPlannerApp {
 
         mockUserFile.write(userList);
 
+        IDataAccessor dataAccessor = new FileDataAccessor(mockUserFile, mockCourseFile);
         boolean repeat;
         do {
             ILoginPageController loginPage = Factory.createLoginPageController();
-
+            loginPage.getDataAccessor(dataAccessor);
             IMainPageController mainPage = loginPage.login();
-
+            mainPage.addDataAccessor(dataAccessor);
             repeat = mainPage.performFunctions();
         } while (repeat);
 

@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 public class LoginPageController implements ILoginPageController{
     private LoginPageView _loginPageView;
+    private IDataAccessor _dataAccessor;
     private Scanner _scanner;
 
     public LoginPageController(LoginPageView loginPageView, Scanner scanner) {
@@ -15,6 +16,11 @@ public class LoginPageController implements ILoginPageController{
         welcomeScreen();
         IUser user = loginScreen();
         return user.getMainPageController(user);
+    }
+
+    @Override
+    public void getDataAccessor(IDataAccessor dataAccessor) {
+        this._dataAccessor = dataAccessor;
     }
 
     private boolean validateUser(IUser input) {

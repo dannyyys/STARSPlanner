@@ -13,11 +13,11 @@ public class Factory {
     }
 
     public static ILoginPageController createLoginPageController() {
-        return new LoginPageController(createLoginPageView(), createDataAccessor(), new Scanner(System.in));
+        return new LoginPageController(createLoginPageView(), new Scanner(System.in));
     }
 
     public static IMainPageController createStudentMainPageController() {
-        return new StudentMainPageController(createStudentMainPageView(), createDataAccessor(), new Scanner(System.in));
+        return new StudentMainPageController(createStudentMainPageView(), new Scanner(System.in));
     }
 
     public static AdminMainPageView createAdminMainPageView() {
@@ -25,13 +25,13 @@ public class Factory {
     }
 
     public static IMainPageController createAdminMainPageController() {
-        return new AdminMainPageController(createAdminMainPageView(), createDataAccessor(), new Scanner(System.in),
+        return new AdminMainPageController(createAdminMainPageView(), new Scanner(System.in),
                 new SimpleDateFormat("dd.MM.yyyy, HH:mm", Locale.ENGLISH));
     }
 
-    public static IDataAccessor createDataAccessor() {
-        return new FileDataAccessor(createMockUserFile(), createMockCourseFile());
-    }
+//    public static IDataAccessor createDataAccessor() {
+//        return new FileDataAccessor(createMockUserFile(), createMockCourseFile());
+//    }
 
     public static IUser createStudent() {
         return new StudentUser(createStudentMainPageController());
