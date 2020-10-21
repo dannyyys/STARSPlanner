@@ -1,4 +1,7 @@
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class StudentMainPageController implements IMainPageController {
@@ -12,24 +15,6 @@ public class StudentMainPageController implements IMainPageController {
         this._studentMainPageView = studentMainPageView;
         this._dataAccessor = dataAccessor;
         this._scanner = scanner;
-    }
-
-    private boolean validateFunctionSelectionChoice(String input) {
-        try {
-            int intInput = Integer.parseInt(input);
-            switch (intInput) {
-                case 1, 2, 3, 4, 5, 6, 7, 8 -> {
-                    return true;
-                }
-                default -> {
-                    _studentMainPageView.inputOutOfBoundError();
-                    return false;
-                }
-            }
-        } catch (NumberFormatException e) {
-            _studentMainPageView.nonNumericInputError();
-            return false;
-        }
     }
 
     @Override
@@ -74,12 +59,47 @@ public class StudentMainPageController implements IMainPageController {
         _studentMainPageView.logoutScreen();
         return true;
     }
+
+    private boolean validateFunctionSelectionChoice(String input) {
+        try {
+            int intInput = Integer.parseInt(input);
+            switch (intInput) {
+                case 1, 2, 3, 4, 5, 6, 7, 8 -> {
+                    return true;
+                }
+                default -> {
+                    _studentMainPageView.inputOutOfBoundError();
+                    return false;
+                }
+            }
+        } catch (NumberFormatException e) {
+            _studentMainPageView.nonNumericInputError();
+            return false;
+        }
+    }
+
     private boolean validateAccessPeriod() {
-        // fetch access time from data accessor
-        // check if current time is within access period.
-        // If yes return true, else return false
-        // handle error checking
-        return true;
+        List<Long> accessPeriod = user.getAccessPeriod();
+        if (accessPeriod == null) {
+            _studentMainPageView.fetchAccessPeriodError();
+            return false;
+        } else if (accessPeriod.isEmpty()) {
+            _studentMainPageView.noAccessPeriodError();
+            return false;
+        } else if (accessPeriod.size() != 2) {
+            _studentMainPageView.fetchAccessPeriodError();
+            return false;
+        }
+        long now = System.currentTimeMillis();
+        boolean isBetween = validateBetweenDates(now, accessPeriod.get(0), accessPeriod.get(1));
+        if (isBetween == false) {
+            _studentMainPageView.invalidAccessPeriodError();
+        }
+        return isBetween;
+    }
+
+    private boolean validateBetweenDates(long now, Long start, Long end) {
+        return ( now >= start ) && (now < end);
     }
 
     private boolean validateCourseSelectionChoice(String input, int numOfCourses) {
@@ -97,23 +117,44 @@ public class StudentMainPageController implements IMainPageController {
         }
     }
 
+    private boolean validateFetchUserData() {
+        try {
+            _dataAccessor.getAllCoursesData();
+            return true;
+        } catch(NullPointerException e) {
+            _studentMainPageView.errorRetrievingCourses();
+            return false;
+        } catch (NegativeArraySizeException e) {
+            _studentMainPageView.noCourseError();
+            return false;
+        }
+    }
+
+    public boolean validateFetchRegisteredCourses() {
+        try {
+            _dataAccessor.getAllCoursesData();
+            return true;
+        } catch(NullPointerException e) {
+            _studentMainPageView.errorRetrievingCourses();
+            return false;
+        } catch (NegativeArraySizeException e) {
+            _studentMainPageView.noCourseError();
+            return false;
+        }
+    }
+
     private void addCourse() {
         _studentMainPageView.addCourseFunctionPrompt();
         boolean isWithinAccessPeriod = validateAccessPeriod();
         if (isWithinAccessPeriod == false) {
-            _studentMainPageView.invalidAccessPeriodError();
             return;
         }
 
+        boolean isValidFetchUserData = validateFetchUserData();
+        if (isValidFetchUserData == false) {
+            return;
+        }
         ArrayList<ICourse> courses = _dataAccessor.getAllCoursesData();
-        if (courses == null) {
-            _studentMainPageView.errorRetrievingCourses();
-            return;
-        } else if (courses.isEmpty()) {
-            _studentMainPageView.noCourseError();
-            return;
-        }
-
         // check that the course is not already taken by the student
         // add in the option to select the index
 
@@ -142,6 +183,11 @@ public class StudentMainPageController implements IMainPageController {
             _studentMainPageView.noCourseError();
             return;
         }
+        boolean isValidFetchRegisteredCourses = validateFetchRegisteredCourses();
+        if (isValidFetchRegisteredCourses == false) {
+            return;
+        }
+        ArrayList<ICourse> courses = _dataAccessor.getAllCoursesData();
 
         boolean isValidCourse;
         String input;

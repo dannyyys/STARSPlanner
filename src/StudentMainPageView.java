@@ -93,4 +93,12 @@ public class StudentMainPageView extends LoginPageView{
     public void logoutScreen() {
         System.out.println("logging out...");
     }
+
+    public void fetchAccessPeriodError() {
+        System.out.println("error fetching access period");
+    }
+
+    public void noAccessPeriodError() {
+        System.out.println("student not assigned access period");
+    }
 }

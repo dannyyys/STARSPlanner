@@ -1,4 +1,5 @@
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -29,20 +30,8 @@ public class Factory {
     }
 
     public static IDataAccessor createDataAccessor() {
-        return new FileDataAccessor(createDatabase());
+        return new FileDataAccessor(createMockUserFile(), createMockCourseFile());
     }
-
-    public static IDatabase createDatabase() {
-        return new MockSerialisedFile();
-    }
-
-//    public static IStudentController createStudentController() {
-//        return new StudentController();
-//    }
-//
-//    public static ICourseController createCourseController() {
-//        return new CourseController();
-//    }
 
     public static IUser createStudent() {
         return new StudentUser(createStudentMainPageController());

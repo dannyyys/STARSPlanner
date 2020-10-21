@@ -60,4 +60,12 @@ public class AdminMainPageView extends LoginPageView{
         System.out.println("Print student list by course");
         System.out.println("___________________________________");
     }
+
+    public void dateAlreadyOverError() {
+        System.out.println("Input date is already over. Please try again");
+    }
+
+    public void invalidAccessPeriodError() {
+        System.out.println("start and end date cannot be the same please try again.");
+    }
 }

@@ -1,10 +1,14 @@
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class StudentUser implements IUser, IStudent {
     private String username;
     private String password;
     private String name;
     private String metricNum;
+    private List<Long> accessPeriod;
     private ArrayList<ICourse> courses = new ArrayList<>();
     private IMainPageController mainPageController;
 
@@ -45,6 +49,18 @@ public class StudentUser implements IUser, IStudent {
     @Override
     public void dropCourse(ICourse course) {
         this.courses.remove(course);
+    }
+
+    @Override
+    public List<Long> getAccessPeriod() {
+        return this.accessPeriod;
+    }
+
+    @Override
+    public void setAccessPeriod(long startDate, long endDate) {
+        accessPeriod.clear();
+        accessPeriod.add(startDate);
+        accessPeriod.add(endDate);
     }
 
     @Override

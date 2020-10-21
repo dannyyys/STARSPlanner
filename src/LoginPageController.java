@@ -3,12 +3,10 @@ import java.util.Scanner;
 
 public class LoginPageController implements ILoginPageController{
     private LoginPageView _loginPageView;
-    private IDataAccessor _dataAccessor;
     private Scanner _scanner;
 
-    public LoginPageController(LoginPageView loginPageView, IDataAccessor dataAccessor, Scanner scanner) {
+    public LoginPageController(LoginPageView loginPageView, Scanner scanner) {
         this._loginPageView = loginPageView;
-        this._dataAccessor = dataAccessor;
         this._scanner = scanner;
     }
 

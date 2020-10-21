@@ -1,52 +1,95 @@
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class FileDataAccessor implements IDataAccessor{
-    private IDatabase savedData;
+    private IUserDatabase savedUserData;
+    private ICourseDatabase savedCourseData;
 
-    public FileDataAccessor(IDatabase serialisedFile) {
-        this.savedData = serialisedFile;
+    private ArrayList<ICourse> allCourses;
+    private ArrayList<IUser> allStudents;
+
+    public FileDataAccessor(IUserDatabase serialisedUserFile, ICourseDatabase serialisedCourseData) {
+        this.savedUserData = serialisedUserFile;
+        this.savedCourseData = serialisedCourseData;
     }
 
     @Override
     public ArrayList<IUser> getAllUsersData() {
-        //do some error checking
-        //temporary
-        return savedData.getAllUsers();
-    }
-
-    @Override
-    public List<Date> getAccessPeriod() {
-        return null;
+        ArrayList<IUser> allUsers = savedUserData.read();
+        if (allUsers == null) {
+            throw new NullPointerException();
+        } else if (allUsers.isEmpty()) {
+            throw new NegativeArraySizeException();
+        } else {
+            return allUsers;
+        }
     }
 
     @Override
     public ArrayList<ICourse> getAllCoursesData() {
-        return savedData.getAllCourses();
+        if (allCourses == null) {
+            allCourses = savedCourseData.read();
+        }
+
+        if (allCourses.isEmpty()) {
+            throw new NegativeArraySizeException();
+        } else {
+            return allCourses;
+        }
     }
 
     @Override
-    public ArrayList<IStudent> getAllStudentsData() {
-        return savedData.getAllStudents();
+    public ArrayList<IUser> getAllStudentsData() {
+        if (allStudents == null) {
+            ArrayList<IUser> allUsers = savedUserData.read();
+            allStudents = new ArrayList<>();
+            for (IUser user : allUsers) {
+                if (user instanceof IStudent) {
+                    allStudents.add(user);
+                }
+            }
+        }
+        if (allStudents.isEmpty()) {
+            throw new NegativeArraySizeException();
+        }
+        return allStudents;
     }
 
     @Override
-    public void saveAccessPeriod(Date start, Date end) {
-        //write new access period into file
+    public void saveAccessPeriod(long start, long end) {
+        if (allStudents == null) {
+            getAllStudentsData();
+        } else if (allStudents.isEmpty()) {
+            throw new NegativeArraySizeException();
+        }
+        for (IUser studentUser : allStudents) {
+            IStudent student = (IStudent) studentUser;
+            student.setAccessPeriod(start, end);
+        }
+        saveStudentData();
     }
 
-    @Override
-    public void saveCourseData(ICourse course) {
-
+    public void saveCourseData() {
+        if (allCourses == null) {
+            getAllCoursesData();
+        }
+        savedCourseData.write(allCourses);
+        //serialise that file
     }
 
-    @Override
-    public void saveStudentData(IStudent student) {
-    }
-
-    @Override
-    public void saveUserData(String loginDetails) {
-
+    private void saveStudentData() {
+        if (allStudents == null) {
+            getAllStudentsData();
+        }
+        ArrayList<IUser> users = getAllUsersData();
+        for (int i = 0; i < users.size(); i++) {
+            for (IUser studentUser : allStudents) {
+                if (users.get(0).equals(studentUser)) {
+                    users.set(i, studentUser);
+                    break;
+                }
+            }
+        }
+        savedUserData.write(users);
+        //serialise that file
     }
 }

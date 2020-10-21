@@ -79,35 +79,57 @@ public class AdminMainPageController implements IMainPageController {
         return true;
     }
 
-    private boolean validateDate(String input) {
+    private boolean validateDateInput(String input) {
         try {
-            Date date = dateFormat.parse(input);
-            // check that date entered is not over already
-            return true;
+            long now = System.currentTimeMillis();
+            long date = dateFormat.parse(input).getTime();
+            boolean isAfter = date >= now;
+            if (isAfter == false) {
+                _adminMainPageView.dateAlreadyOverError();
+            }
+            return isAfter;
         } catch (ParseException e) {
             _adminMainPageView.inputDateInvalidFormatError();
             return false;
         }
     }
+
+    private boolean validateBetweenDates(long now, Long start, Long end) {
+        return ( now >= start ) && (now < end);
+    }
+
+    private boolean validateAccessPeriod(long start, long end) {
+        long now = System.currentTimeMillis();
+        boolean isBetween = validateBetweenDates(now, start, end);
+        if (isBetween == false) {
+            _adminMainPageView.invalidAccessPeriodError();
+        }
+        return isBetween;
+    }
+
     private void editStudentAccessPeriod() {
-        boolean isValidAccessPeriodChange;
-        String input;
         try {
+            boolean isValidAccessPeriod;
+            long startDate, endDate;
             do {
-                _adminMainPageView.editStudentAccessPeriodFunctionPromptStartDate();
-                input = _scanner.nextLine();
-                isValidAccessPeriodChange = validateDate(input);
-            } while (isValidAccessPeriodChange == false);
-            Date startDate = dateFormat.parse(input);
+                boolean isValidAccessPeriodChange;
+                String input;
+                do {
+                    _adminMainPageView.editStudentAccessPeriodFunctionPromptStartDate();
+                    input = _scanner.nextLine();
+                    isValidAccessPeriodChange = validateDateInput(input);
+                } while (isValidAccessPeriodChange == false);
+                startDate = dateFormat.parse(input).getTime();
 
-            do {
-                _adminMainPageView.editStudentAccessPeriodFunctionPromptEndDate();
-                input = _scanner.nextLine();
-                isValidAccessPeriodChange = validateDate(input);
-            } while (isValidAccessPeriodChange == false);
-            Date endDate = dateFormat.parse(input);
+                do {
+                    _adminMainPageView.editStudentAccessPeriodFunctionPromptEndDate();
+                    input = _scanner.nextLine();
+                    isValidAccessPeriodChange = validateDateInput(input);
+                } while (isValidAccessPeriodChange == false);
+                endDate = dateFormat.parse(input).getTime();
 
-            // somehow check that the dates are not the same, but not inside this function
+                isValidAccessPeriod = validateAccessPeriod(startDate, endDate);
+            } while (isValidAccessPeriod == false);
 
             _dataAccessor.saveAccessPeriod(startDate, endDate);
             _adminMainPageView.editStudentAccessPeriodSuccessMessage();
