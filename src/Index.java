@@ -37,6 +37,16 @@ public class Index implements IIndex {
     }
 
     @Override
+    public void addStudentWaitingList(IStudent user) {
+        this.studentWaitingList.add(user);
+    }
+
+    @Override
+    public void removeStudentWaitingList(IStudent user) {
+        this.studentWaitingList.remove(user);
+    }
+
+    @Override
     public ArrayList<IStudent> getEnrolledStudentList() {
         return enrolledStudentList;
     }
@@ -44,6 +54,16 @@ public class Index implements IIndex {
     @Override
     public void setEnrolledStudentList(ArrayList<IStudent> enrolledStudentList) {
         this.enrolledStudentList = enrolledStudentList;
+    }
+
+    @Override
+    public void addEnrolledStudentList(IStudent user) {
+        this.enrolledStudentList.add(user);
+    }
+
+    @Override
+    public void removeEnrolledStudentList(IStudent user) {
+        this.enrolledStudentList.remove(user);
     }
 
     @Override

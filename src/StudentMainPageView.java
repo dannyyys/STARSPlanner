@@ -70,6 +70,19 @@ public class StudentMainPageView extends LoginPageView{
     public void changeCourseIndexPrompt() {
         System.out.println("Change Index Number of Course");
         System.out.println("___________________________________");
+        System.out.println("Please select the course code you will like to change index: ");
+    }
+
+    public void courseCodeToChangePrompt() {
+        System.out.println("Please enter the course code you will like to change index: ");
+    }
+
+    public void enterInitialIndexPrompt() {
+        System.out.println("Please enter the index you are currently in: ");
+    }
+
+    public void changeCourseIndexPromptIndex() {
+        System.out.println("Please select the index you will like to change to: ");
     }
 
     public void swapCourseWithPeerPrompt() {
@@ -98,5 +111,54 @@ public class StudentMainPageView extends LoginPageView{
 
     public void noAccessPeriodError() {
         System.out.println("student not assigned access period");
+    }
+
+    public void errorCourseNotRegistered() {
+        System.out.println("Course not registered");
+    }
+
+    public void errorCourseNotRegisteredForPeer() {
+        System.out.println("Course not registered for peer");
+    }
+
+    public void errorIndexNotInCourse() {
+        System.out.println("Index not in course");
+    }
+
+    public void indexSwapSuccessMessage(IStudent user, IStudent peer, int initialIndex, int peerIndex) {
+        System.out.println(user.getMetricNum() + "-Index Number " + initialIndex + " has been successfully swapped with " + peer.getMetricNum() + "-Index Number " + peerIndex);
+    }
+
+    public void changeIndexSuccessMessage() {
+        System.out.println("Index successfully changed");
+    }
+
+    public void studentAddToWaitingListMessage() {
+        System.out.println("You are added to the waiting list");
+    }
+
+    public void printUserMetric(IStudent user) {
+        System.out.println("Your Metric number: " + user.getMetricNum());
+    }
+
+    public void enterPeerIndexPrompt() {
+        System.out.println("Enter Peer's index number:");
+    }
+
+    public void enterPeerUsernamePrompt() {
+        System.out.println("Peer's Username:");
+    }
+
+    public void enterPeerPasswordPrompt() {
+        System.out.println("Peer's passward:");
+    }
+
+    public void invalidUserError() {
+        System.out.println("Invalid username/password");
+        System.out.println("please try again");
+    }
+
+    public void noUserListError() {
+        System.out.println("no users available");
     }
 }
